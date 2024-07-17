@@ -1,9 +1,11 @@
 // server/src/routes/containers.ts
 import { Router } from 'express';
-import { createContainer, startContainer, stopContainer, removeContainer, updateContainer } from '../controllers/containers';
+import { deployContainer, listContainers, createContainer, startContainer, stopContainer, removeContainer, updateContainer} from '../controllers/containers';
 
 const router = Router();
 
+router.post('/deploy', deployContainer);
+router.get('/', listContainers);
 router.post('/', createContainer);
 router.post('/:id/start', startContainer);
 router.post('/:id/stop', stopContainer);

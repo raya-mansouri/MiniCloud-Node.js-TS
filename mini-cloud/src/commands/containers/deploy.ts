@@ -1,8 +1,8 @@
 import { Command, Flags } from '@oclif/core';
 import axios from 'axios';
 
-export default class Create extends Command {
-  static description = 'Create a new i';
+export default class Deploy extends Command {
+  static description = 'Deploy a container from a pre-built Docker image';
 
   static flags = {
     name: Flags.string({ char: 'n', description: 'Container name', required: true }),
@@ -13,26 +13,23 @@ export default class Create extends Command {
   };
 
   async run() {
-    const { flags } = await this.parse(Create);
+    const { flags } = await this.parse(Deploy);
 
     try {
-      const response = await axios.post('http://localhost:4000/api/containers', {
+      const response = await axios.post('http://localhost:4000/api/containers/deploy', {
         name: flags.name,
         image: flags.image,
         env: flags.env,
         cpu: flags.cpu,
         memory: flags.memory,
       });
-      this.log(`Created container ${response.data.Id}`);
+      this.log(`Deployed container ${response.data.Id}`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        // Handle Axios-specific errors
-        this.error(`Failed to create container: ${error.message}`);
+        this.error(`Failed to deploy container: ${error.message}`);
       } else if (error instanceof Error) {
-        // Handle generic errors
-        this.error(`Failed to create container: ${error.message}`);
+        this.error(`Failed to deploy container: ${error.message}`);
       } else {
-        // Handle unexpected errors
         this.error('An unknown error occurred');
       }
     }
